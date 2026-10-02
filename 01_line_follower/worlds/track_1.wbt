@@ -1,0 +1,52 @@
+#VRML_SIM R2025a utf8
+# Line follower - Track 1 (easy)
+# Recruitment task / Zadanie rekrutacyjne
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/gctronic/e-puck/protos/E-puckGroundSensors.proto"
+
+WorldInfo {
+  info [
+    "Line follower - Track 1 (easy)"
+    "Drive one full lap along the black line as fast as possible."
+  ]
+  title "Line follower - Track 1 (easy)"
+  basicTimeStep 16
+}
+Viewpoint {
+  orientation -0.4712 0.4712 0.7456 1.8603
+  position 0.000 -0.950 2.000
+}
+TexturedBackground {}
+TexturedBackgroundLight {}
+RectangleArena {
+  floorSize 2.0 1.0
+  floorTileSize 2.0 1.0
+  floorAppearance PBRAppearance {
+    baseColorMap ImageTexture {
+      url [ "textures/track_1.png" ]
+      filtering 1
+    }
+    roughness 1
+    metalness 0
+  }
+  wallHeight 0.03
+}
+DEF EPUCK E-puck {
+  translation -0.2277 -0.3200 0
+  rotation 0 0 1 0.0000
+  controller "line_follower"
+  groundSensorsSlot [
+    E-puckGroundSensors {
+    }
+  ]
+}
+Robot {
+  name "judge"
+  controller "judge"
+  controllerArgs [ "track_1" ]
+  supervisor TRUE
+}

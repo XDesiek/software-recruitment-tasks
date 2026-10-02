@@ -1,0 +1,191 @@
+#VRML_SIM R2025a utf8
+# Maze - Maze 1 (easy)
+# Recruitment task / Zadanie rekrutacyjne
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/gctronic/e-puck/protos/E-puckGroundSensors.proto"
+
+WorldInfo {
+  info [
+    "Maze - Maze 1 (easy)"
+    "Drive from the start to the green goal area as fast as possible."
+  ]
+  title "Maze - Maze 1 (easy)"
+  basicTimeStep 16
+}
+Viewpoint {
+  orientation -0.4653 0.4653 0.7529 1.8508
+  position 0.000 -0.690 1.380
+}
+TexturedBackground {}
+TexturedBackgroundLight {}
+RectangleArena {
+  floorSize 0.9 0.9
+  floorTileSize 0.9 0.9
+  floorAppearance PBRAppearance {
+    baseColor 0.92 0.92 0.9
+    roughness 1
+    metalness 0
+  }
+  wallHeight 0.03
+}
+DEF GOAL Pose {
+  translation 0.240 0.240 0.0005
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.1 0.65 0.2 roughness 1 metalness 0 }
+      geometry Plane { size 0.10 0.10 }
+    }
+  ]
+}
+DEF MAZE Solid {
+  children [
+    Pose {
+      translation 0.000 -0.300 0.025
+      children [ Shape { appearance DEF WALL_APP PBRAppearance {
+        baseColor 0.85 0.55 0.3
+        roughness 0.8
+        metalness 0
+      } geometry Box { size 0.610 0.01 0.05 } } ]
+    }
+    Pose {
+      translation -0.120 -0.180 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.130 0.01 0.05 } } ]
+    }
+    Pose {
+      translation 0.180 -0.180 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.250 0.01 0.05 } } ]
+    }
+    Pose {
+      translation -0.240 -0.060 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.130 0.01 0.05 } } ]
+    }
+    Pose {
+      translation 0.120 -0.060 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.130 0.01 0.05 } } ]
+    }
+    Pose {
+      translation 0.000 0.060 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.130 0.01 0.05 } } ]
+    }
+    Pose {
+      translation 0.000 0.180 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.370 0.01 0.05 } } ]
+    }
+    Pose {
+      translation 0.000 0.300 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.610 0.01 0.05 } } ]
+    }
+    Pose {
+      translation -0.300 0.000 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.01 0.610 0.05 } } ]
+    }
+    Pose {
+      translation -0.180 -0.240 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.01 0.130 0.05 } } ]
+    }
+    Pose {
+      translation -0.180 0.060 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.01 0.250 0.05 } } ]
+    }
+    Pose {
+      translation -0.060 -0.060 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.01 0.250 0.05 } } ]
+    }
+    Pose {
+      translation 0.060 0.000 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.01 0.130 0.05 } } ]
+    }
+    Pose {
+      translation 0.180 0.120 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.01 0.130 0.05 } } ]
+    }
+    Pose {
+      translation 0.300 0.000 0.025
+      children [ Shape { appearance USE WALL_APP geometry Box { size 0.01 0.610 0.05 } } ]
+    }
+  ]
+  name "maze"
+  boundingObject Group {
+    children [
+      Pose {
+        translation 0.000 -0.300 0.025
+        children [ Box { size 0.610 0.01 0.05 } ]
+      }
+      Pose {
+        translation -0.120 -0.180 0.025
+        children [ Box { size 0.130 0.01 0.05 } ]
+      }
+      Pose {
+        translation 0.180 -0.180 0.025
+        children [ Box { size 0.250 0.01 0.05 } ]
+      }
+      Pose {
+        translation -0.240 -0.060 0.025
+        children [ Box { size 0.130 0.01 0.05 } ]
+      }
+      Pose {
+        translation 0.120 -0.060 0.025
+        children [ Box { size 0.130 0.01 0.05 } ]
+      }
+      Pose {
+        translation 0.000 0.060 0.025
+        children [ Box { size 0.130 0.01 0.05 } ]
+      }
+      Pose {
+        translation 0.000 0.180 0.025
+        children [ Box { size 0.370 0.01 0.05 } ]
+      }
+      Pose {
+        translation 0.000 0.300 0.025
+        children [ Box { size 0.610 0.01 0.05 } ]
+      }
+      Pose {
+        translation -0.300 0.000 0.025
+        children [ Box { size 0.01 0.610 0.05 } ]
+      }
+      Pose {
+        translation -0.180 -0.240 0.025
+        children [ Box { size 0.01 0.130 0.05 } ]
+      }
+      Pose {
+        translation -0.180 0.060 0.025
+        children [ Box { size 0.01 0.250 0.05 } ]
+      }
+      Pose {
+        translation -0.060 -0.060 0.025
+        children [ Box { size 0.01 0.250 0.05 } ]
+      }
+      Pose {
+        translation 0.060 0.000 0.025
+        children [ Box { size 0.01 0.130 0.05 } ]
+      }
+      Pose {
+        translation 0.180 0.120 0.025
+        children [ Box { size 0.01 0.130 0.05 } ]
+      }
+      Pose {
+        translation 0.300 0.000 0.025
+        children [ Box { size 0.01 0.610 0.05 } ]
+      }
+    ]
+  }
+}
+DEF EPUCK E-puck {
+  translation -0.240 -0.240 0
+  rotation 0 0 1 1.5708
+  controller "maze_solver"
+  groundSensorsSlot [
+    E-puckGroundSensors {
+    }
+  ]
+}
+Robot {
+  name "judge"
+  controller "judge"
+  controllerArgs [ "maze_1" ]
+  supervisor TRUE
+}

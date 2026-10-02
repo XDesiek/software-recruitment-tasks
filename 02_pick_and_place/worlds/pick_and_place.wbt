@@ -1,0 +1,90 @@
+#VRML_SIM R2025a utf8
+# Pick and place
+# Recruitment task / Zadanie rekrutacyjne
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/universal_robots/protos/UR5e.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/devices/robotiq/protos/Robotiq2f85Gripper.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/factory/containers/protos/PlasticCrate.proto"
+
+WorldInfo {
+  info [
+    "Pick and place with a UR5e arm and a Robotiq 2F-85 gripper."
+    "Move the cubes into the crate. The judge robot prints the result."
+  ]
+  title "Pick and place UR5e"
+  basicTimeStep 8
+  contactProperties [
+    ContactProperties {
+      coulombFriction [ 1.5 ]
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.2705 0.112 0.9562 2.3874
+  position 1.35 -1.0 1.05
+}
+TexturedBackground {}
+TexturedBackgroundLight {}
+RectangleArena {
+  floorSize 2 2
+}
+DEF UR5E UR5e {
+  controller "pick_and_place"
+  toolSlot [
+    Robotiq2f85Gripper {
+      rotation 1 0 0 -1.5708
+    }
+  ]
+}
+DEF CRATE PlasticCrate {
+  translation 0 0.5 0
+  size 0.3 0.3 0.12
+  color 0.2 0.4 0.8
+}
+DEF RED_CUBE Solid {
+  translation 0.45 -0.15 0.025
+  rotation 0 0 1 -0.6074
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.85 0.1 0.1 roughness 0.6 metalness 0 }
+      geometry Box { size 0.05 0.05 0.05 }
+    }
+  ]
+  name "red cube"
+  boundingObject Box { size 0.05 0.05 0.05 }
+  physics Physics { density -1 mass 0.05 }
+}
+DEF GREEN_CUBE Solid {
+  translation 0.55 0.05 0.025
+  rotation 0 0 1 -0.1536
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.1 0.7 0.2 roughness 0.6 metalness 0 }
+      geometry Box { size 0.05 0.05 0.05 }
+    }
+  ]
+  name "green cube"
+  boundingObject Box { size 0.05 0.05 0.05 }
+  physics Physics { density -1 mass 0.05 }
+}
+DEF YELLOW_CUBE Solid {
+  translation 0.40 0.20 0.025
+  rotation 0 0 1 0.1588
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.95 0.8 0.1 roughness 0.6 metalness 0 }
+      geometry Box { size 0.05 0.05 0.05 }
+    }
+  ]
+  name "yellow cube"
+  boundingObject Box { size 0.05 0.05 0.05 }
+  physics Physics { density -1 mass 0.05 }
+}
+Robot {
+  name "judge"
+  controller "judge"
+  supervisor TRUE
+}

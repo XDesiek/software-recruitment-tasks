@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+# Webots project and cache files
+.*.wbproj
+.*.jpg
+*.wbt.bak
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

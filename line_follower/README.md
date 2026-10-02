@@ -1,8 +1,18 @@
-# Zadanie 1: Line follower
+# Zadanie rekrutacyjne: Line follower
 
 [English version](README_EN.md) · PDF: `line_follower_PL.pdf`
 
 ![Tor 1](images/track_1.png)
+
+## Od czego zacząć
+
+To jest jedno z zadań rekrutacyjnych do sekcji software. Wykonujesz je samodzielnie w symulatorze robotów **Webots**, a program piszesz w **Pythonie**. Nie musisz wcześniej znać Webots: wszystko, czego potrzebujesz, znajdziesz w tym opisie. Do zadania dołączony jest gotowy świat symulacji, szkielet programu oraz sędzia, który automatycznie mierzy wynik.
+
+1. Zainstaluj Webots R2025a i Python 3 (instrukcja w sekcji „Webots: co to jest i jak zacząć” na końcu tego opisu).
+2. Rozpakuj folder zadania w całości w zwykłym folderze, poza folderem instalacji Webots i poza OneDrive.
+3. Przeczytaj opis zadania poniżej.
+4. Otwórz w Webots świat z folderu `worlds` i zacznij pisać kod w pliku `line_follower.py`.
+5. Gotowe rozwiązanie wyślij mailem (sekcja „Jak oddać rozwiązanie”).
 
 ## Opis zadania
 
@@ -20,7 +30,7 @@ Ten sam program powinien przejechać oba tory bez zmian.
 ## Struktura folderu
 
 ```
-01_line_follower/
+line_follower/
 ├── worlds/
 │   ├── track_1.wbt                        tor 1
 │   ├── track_2.wbt                        tor 2
@@ -62,15 +72,36 @@ Poziomy:
 - Zastanów się, co robot ma zrobić, gdy żaden czujnik nie widzi linii (np. po zbyt szybkim zakręcie) i gdy wszystkie widzą linię (skrzyżowanie).
 - Szybkość to kompromis: zwolnij w zakrętach, przyspiesz na prostych.
 
-## Co oddać
+## Jak oddać rozwiązanie
 
-- plik sterownika (`.py`) z Twoim rozwiązaniem,
-- krótkie nagranie ekranu (do 2 minut) pokazujące przejazd/działanie robota i wynik sędziego w konsoli,
-- kilka zdań opisu: jak działa Twoje rozwiązanie, co sprawiało trudność i co byś poprawił(a), mając więcej czasu.
+Rozwiązanie wyślij e-mailem na adres **selim.mucharski.stud@pw.edu.pl**.
 
-Rozwiązanie wyślij w sposób podany przez organizatorów rekrutacji. Możesz korzystać z dokumentacji, internetu i narzędzi AI, ale na rozmowie poprosimy Cię o wyjaśnienie swojego kodu, więc upewnij się, że rozumiesz każdą jego linijkę.
+**Temat** wiadomości: `[Rekrutacja] line_follower - Imię Nazwisko`
 
-Nie modyfikuj plików sędziego ani świata (poza eksperymentami na własny użytek). Przy ocenie uruchomimy Twój sterownik w oryginalnych światach.
+**Załącznik**: plik ZIP o nazwie `imie_nazwisko_line_follower.zip`, a w nim:
+
+- plik sterownika z Twoim rozwiązaniem (`line_follower.py`) oraz ewentualne dodatkowe pliki `.py`, z których korzysta,
+- plik `README.md` (lub `.txt`) z kilkoma zdaniami opisu: jak działa Twoje rozwiązanie, co sprawiało trudność i co byś poprawił(a), mając więcej czasu.
+
+W **treści** wiadomości podaj:
+
+- imię i nazwisko,
+- kontakt: nick na Discordzie (oraz e-mail, jeśli piszesz z innego adresu niż ten, na który mamy odpowiadać),
+- kierunek i rok studiów,
+- którego zadania dotyczy rozwiązanie (Line follower) i jakie poziomy udało się zrealizować,
+- wyniki z konsoli sędziego (np. czasy przejazdów),
+- link do krótkiego nagrania ekranu (do 2 minut, np. niepubliczny film na YouTube albo plik na Dysku Google z dostępem przez link), na którym widać działanie robota i wynik sędziego.
+
+Nie wysyłaj samego nagrania jako załącznika, bo może być za duże. Jeśli poczta zablokuje załącznik ZIP, umieść go na Dysku Google lub OneDrive i wyślij link.
+
+### Zasady
+
+Możesz korzystać z dokumentacji, internetu i narzędzi AI, ale na rozmowie poprosimy Cię o wyjaśnienie swojego kodu, więc upewnij się, że rozumiesz każdą jego linijkę. Nie modyfikuj plików sędziego ani świata (poza eksperymentami na własny użytek). Przy ocenie uruchomimy Twój sterownik w oryginalnych światach.
+
+## Kontakt
+
+- rozwiązania: e-mail **selim.mucharski.stud@pw.edu.pl**
+- pytania i problemy techniczne: Discord, **Selim Mucharski**: https://discordapp.com/users/519631917444890624
 
 ## Webots: co to jest i jak zacząć
 
@@ -87,7 +118,7 @@ Webots to darmowy, otwartoźródłowy symulator robotów rozwijany przez firmę 
 
 ### Pierwsze uruchomienie zadania
 
-1. Pobierz to repozytorium (`git clone` albo *Code → Download ZIP*) i rozpakuj je w zwykłym folderze, np. `C:\robotyka\`. **Nie** umieszczaj go w folderze instalacji Webots (`C:\Program Files\Webots`) ani w folderze synchronizowanym z OneDrive.
+1. Rozpakuj folder z zadaniem (w całości, razem z podfolderami `worlds` i `controllers`) w zwykłym folderze, np. `C:\robotyka\`. **Nie** umieszczaj go w folderze instalacji Webots (`C:\Program Files\Webots`) ani w folderze synchronizowanym z OneDrive.
 2. W Webots wybierz *File → Open World* i otwórz plik `.wbt` z folderu `worlds` wybranego zadania.
 3. Przy pierwszym otwarciu Webots pobiera modele robotów z internetu, więc potrzebne jest połączenie z siecią. Może to potrwać chwilę.
 4. Symulację uruchamiasz przyciskiem play (▶), zatrzymujesz przyciskiem pauzy, a przycisk reset (strzałka zawracająca) przywraca stan początkowy.

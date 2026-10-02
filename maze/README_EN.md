@@ -1,8 +1,18 @@
-# Task 3: Maze
+# Recruitment task: Maze
 
 [Wersja polska](README.md) · PDF: `maze_EN.pdf`
 
 ![Maze 1](images/maze_1.png)
+
+## Getting started
+
+This is one of the recruitment tasks for the software section. You solve it on your own in the **Webots** robot simulator and write the program in **Python**. You do not need to know Webots beforehand: everything you need is in this description. The task comes with a ready simulation world, a program skeleton and a judge that measures the result automatically.
+
+1. Install Webots R2025a and Python 3 (see "Webots: what it is and how to start" at the end of this description).
+2. Unpack the whole task folder in a normal folder, outside the Webots installation folder and outside OneDrive.
+3. Read the task description below.
+4. Open a world from the `worlds` folder in Webots and start writing code in `maze_solver.py`.
+5. Send your finished solution by e-mail (see "How to submit your solution").
 
 ## Task description
 
@@ -20,7 +30,7 @@ The same program should solve both mazes without changes.
 ## Folder structure
 
 ```
-03_maze/
+maze/
 ├── worlds/
 │   ├── maze_1.wbt
 │   └── maze_2.wbt
@@ -59,15 +69,36 @@ Levels:
 - Heading errors add up. Use the walls to correct them: keep an equal distance from the side walls, and when facing a wall, square up to it with the front sensors.
 - The sensor readings are noisy, so it is worth averaging a few measurements before making a decision.
 
-## What to submit
+## How to submit your solution
 
-- your controller file (`.py`),
-- a short screen recording (up to 2 minutes) showing the robot in action and the judge's result in the console,
-- a few sentences of description: how your solution works, what was difficult and what you would improve with more time.
+Send your solution by e-mail to **selim.mucharski.stud@pw.edu.pl**.
 
-Send your solution in the way given by the recruitment organisers. You may use the documentation, the internet and AI tools, but during the interview we will ask you to explain your code, so make sure you understand every line of it.
+E-mail **subject**: `[Rekrutacja] maze - Name Surname`
 
-Do not modify the judge or world files (except for your own experiments). We will run your controller in the original worlds during the evaluation.
+**Attachment**: a ZIP file named `name_surname_maze.zip`, containing:
+
+- your controller file (`maze_solver.py`) and any additional `.py` files it uses,
+- a `README.md` (or `.txt`) file with a few sentences of description: how your solution works, what was difficult and what you would improve with more time.
+
+In the e-mail **body** give:
+
+- your name and surname,
+- contact: your Discord nickname (and an e-mail address, if it differs from the one you are writing from),
+- your field and year of study,
+- which task the solution is for (Maze) and which levels you completed,
+- the results from the judge console (e.g. lap times),
+- a link to a short screen recording (up to 2 minutes, e.g. an unlisted YouTube video or a Google Drive file shared by link) showing the robot in action and the judge's result.
+
+Do not attach the recording itself, as it may be too large. If your e-mail service blocks the ZIP attachment, upload it to Google Drive or OneDrive and send the link.
+
+### Rules
+
+You may use the documentation, the internet and AI tools, but during the interview we will ask you to explain your code, so make sure you understand every line of it. Do not modify the judge or world files (except for your own experiments). We will run your controller in the original worlds during the evaluation.
+
+## Contact
+
+- solutions: e-mail **selim.mucharski.stud@pw.edu.pl**
+- questions and technical problems: Discord, **Selim Mucharski**: https://discordapp.com/users/519631917444890624
 
 ## Webots: what it is and how to start
 
@@ -84,7 +115,7 @@ Webots is a free, open-source robot simulator developed by Cyberbotics. It lets 
 
 ### Running a task for the first time
 
-1. Download this repository (`git clone` or *Code → Download ZIP*) and unpack it in a normal folder, e.g. `C:\robotics\`. **Do not** put it inside the Webots installation folder (`C:\Program Files\Webots`) or in a folder synchronised with OneDrive.
+1. Unpack the task folder (as a whole, together with the `worlds` and `controllers` subfolders) in a normal folder, e.g. `C:\robotics\`. **Do not** put it inside the Webots installation folder (`C:\Program Files\Webots`) or in a folder synchronised with OneDrive.
 2. In Webots choose *File → Open World* and open the `.wbt` file from the `worlds` folder of the chosen task.
 3. The first time a world is opened, Webots downloads the robot models from the internet, so you need a network connection. This may take a moment.
 4. Start the simulation with the play button (▶), pause it with the pause button, and the reset button (circular arrow) restores the initial state.

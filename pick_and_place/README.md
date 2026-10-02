@@ -1,8 +1,18 @@
-# Zadanie 2: Pick and place
+# Zadanie rekrutacyjne: Pick and place
 
 [English version](README_EN.md) · PDF: `pick_and_place_PL.pdf`
 
 ![Scena](images/pick_and_place.png)
+
+## Od czego zacząć
+
+To jest jedno z zadań rekrutacyjnych do sekcji software. Wykonujesz je samodzielnie w symulatorze robotów **Webots**, a program piszesz w **Pythonie**. Nie musisz wcześniej znać Webots: wszystko, czego potrzebujesz, znajdziesz w tym opisie. Do zadania dołączony jest gotowy świat symulacji, szkielet programu oraz sędzia, który automatycznie mierzy wynik.
+
+1. Zainstaluj Webots R2025a i Python 3 (instrukcja w sekcji „Webots: co to jest i jak zacząć” na końcu tego opisu).
+2. Rozpakuj folder zadania w całości w zwykłym folderze, poza folderem instalacji Webots i poza OneDrive.
+3. Przeczytaj opis zadania poniżej.
+4. Otwórz w Webots świat z folderu `worlds` i zacznij pisać kod w pliku `pick_and_place.py`.
+5. Gotowe rozwiązanie wyślij mailem (sekcja „Jak oddać rozwiązanie”).
 
 ## Opis zadania
 
@@ -13,7 +23,7 @@ Przed Tobą ramię robotyczne **Universal Robots UR5e** z chwytakiem **Robotiq 2
 ## Struktura folderu
 
 ```
-02_pick_and_place/
+pick_and_place/
 ├── worlds/pick_and_place.wbt
 └── controllers/
     ├── pick_and_place/
@@ -59,15 +69,36 @@ Poziomy:
 - Kostki są symetryczne, więc obrót o 90° (`yaw ± π/2`) też jest dobry. Czasem pozwala to uniknąć dużego obrotu nadgarstka.
 - Jeśli chcesz zrozumieć, jak działa kinematyka odwrotna, zajrzyj do `ur5e_kinematics.py`. Rozwiązanie numeryczne (metoda tłumionych najmniejszych kwadratów) jest tam opisane w komentarzach.
 
-## Co oddać
+## Jak oddać rozwiązanie
 
-- plik sterownika (`.py`) z Twoim rozwiązaniem,
-- krótkie nagranie ekranu (do 2 minut) pokazujące przejazd/działanie robota i wynik sędziego w konsoli,
-- kilka zdań opisu: jak działa Twoje rozwiązanie, co sprawiało trudność i co byś poprawił(a), mając więcej czasu.
+Rozwiązanie wyślij e-mailem na adres **selim.mucharski.stud@pw.edu.pl**.
 
-Rozwiązanie wyślij w sposób podany przez organizatorów rekrutacji. Możesz korzystać z dokumentacji, internetu i narzędzi AI, ale na rozmowie poprosimy Cię o wyjaśnienie swojego kodu, więc upewnij się, że rozumiesz każdą jego linijkę.
+**Temat** wiadomości: `[Rekrutacja] pick_and_place - Imię Nazwisko`
 
-Nie modyfikuj plików sędziego ani świata (poza eksperymentami na własny użytek). Przy ocenie uruchomimy Twój sterownik w oryginalnych światach.
+**Załącznik**: plik ZIP o nazwie `imie_nazwisko_pick_and_place.zip`, a w nim:
+
+- plik sterownika z Twoim rozwiązaniem (`pick_and_place.py`) oraz ewentualne dodatkowe pliki `.py`, z których korzysta,
+- plik `README.md` (lub `.txt`) z kilkoma zdaniami opisu: jak działa Twoje rozwiązanie, co sprawiało trudność i co byś poprawił(a), mając więcej czasu.
+
+W **treści** wiadomości podaj:
+
+- imię i nazwisko,
+- kontakt: nick na Discordzie (oraz e-mail, jeśli piszesz z innego adresu niż ten, na który mamy odpowiadać),
+- kierunek i rok studiów,
+- którego zadania dotyczy rozwiązanie (Pick and place) i jakie poziomy udało się zrealizować,
+- wyniki z konsoli sędziego (np. czasy przejazdów),
+- link do krótkiego nagrania ekranu (do 2 minut, np. niepubliczny film na YouTube albo plik na Dysku Google z dostępem przez link), na którym widać działanie robota i wynik sędziego.
+
+Nie wysyłaj samego nagrania jako załącznika, bo może być za duże. Jeśli poczta zablokuje załącznik ZIP, umieść go na Dysku Google lub OneDrive i wyślij link.
+
+### Zasady
+
+Możesz korzystać z dokumentacji, internetu i narzędzi AI, ale na rozmowie poprosimy Cię o wyjaśnienie swojego kodu, więc upewnij się, że rozumiesz każdą jego linijkę. Nie modyfikuj plików sędziego ani świata (poza eksperymentami na własny użytek). Przy ocenie uruchomimy Twój sterownik w oryginalnych światach.
+
+## Kontakt
+
+- rozwiązania: e-mail **selim.mucharski.stud@pw.edu.pl**
+- pytania i problemy techniczne: Discord, **Selim Mucharski**: https://discordapp.com/users/519631917444890624
 
 ## Webots: co to jest i jak zacząć
 
@@ -84,7 +115,7 @@ Webots to darmowy, otwartoźródłowy symulator robotów rozwijany przez firmę 
 
 ### Pierwsze uruchomienie zadania
 
-1. Pobierz to repozytorium (`git clone` albo *Code → Download ZIP*) i rozpakuj je w zwykłym folderze, np. `C:\robotyka\`. **Nie** umieszczaj go w folderze instalacji Webots (`C:\Program Files\Webots`) ani w folderze synchronizowanym z OneDrive.
+1. Rozpakuj folder z zadaniem (w całości, razem z podfolderami `worlds` i `controllers`) w zwykłym folderze, np. `C:\robotyka\`. **Nie** umieszczaj go w folderze instalacji Webots (`C:\Program Files\Webots`) ani w folderze synchronizowanym z OneDrive.
 2. W Webots wybierz *File → Open World* i otwórz plik `.wbt` z folderu `worlds` wybranego zadania.
 3. Przy pierwszym otwarciu Webots pobiera modele robotów z internetu, więc potrzebne jest połączenie z siecią. Może to potrwać chwilę.
 4. Symulację uruchamiasz przyciskiem play (▶), zatrzymujesz przyciskiem pauzy, a przycisk reset (strzałka zawracająca) przywraca stan początkowy.

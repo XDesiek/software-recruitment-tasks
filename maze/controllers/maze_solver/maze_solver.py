@@ -61,7 +61,7 @@ def clamp(value, low=-MAX_SPEED, high=MAX_SPEED):
 
 
 
-ticks = 0
+green = False
 # --- Main loop ---------------------------------------------------------------
 while robot.step(timestep) != -1:
     ps = [s.getValue() for s in distance_sensors]
@@ -75,22 +75,28 @@ while robot.step(timestep) != -1:
 
     # TODO: decide how the robot should move.
     # Right now it drives forward and simply stops in front of a wall.
-    directions= ["forward", "left", "right"]
-    move = {directions[0]:(3.0,3.0),directions[1]:(-3.14,3.14),directions[2]:(3.14,0.0)}
-    wall_front = front>140
-    wall_front_right = front_right>130
-    wall_right = right>140
 
-    if wall_right and  wall_front_right or wall_front and wall_front_right:
-        current_move = "left"
-    elif wall_right or wall_front_right:
-        current_move = "forward"
-    else:
-        current_move = "right"
+    move = {"forward":(3.0,3.0),"left":(-3.14,3.14),"right":(3.14,0.0),"stop":(0.0,0.0)}
+    wall_front,wall_front_right,wall_right = front>140,front_right>130,right>140
+    if not green:
+        if wall_right and  wall_front_right or wall_front and wall_front_right:
+            current_move = "left"
+        elif wall_right or wall_front_right:
+            current_move = "forward"
+        else:
+            current_move = "right"
+
+        for sensor in ground_sensors:
+            if sensor.getValue() <600:
+                green = True
+
+    if green and wall_front:
+        current_move = "stop"
+    # move
+    (left_speed, right_speed) = move[current_move]
 
 
     # print(f"front={front:.0f}, front-right={front_right:.0f}, right={right:.0f}, front-left={front_left:.0f}, left={left:.0f}")
-    (left_speed, right_speed) = move[current_move]
 
 
     left_motor.setVelocity(clamp(left_speed))

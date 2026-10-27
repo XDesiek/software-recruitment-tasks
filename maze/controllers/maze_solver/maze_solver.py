@@ -57,22 +57,41 @@ def clamp(value, low=-MAX_SPEED, high=MAX_SPEED):
     return max(low, min(high, value))
 
 
+
+
+
+
+ticks = 0
 # --- Main loop ---------------------------------------------------------------
 while robot.step(timestep) != -1:
     ps = [s.getValue() for s in distance_sensors]
     front = max(ps[0], ps[7])
+    front_left= ps[6]
     left = ps[5]
+    front_right= ps[1]
     right = ps[2]
 
     # Uncomment to see the sensor values in the console:
-    # print(f"front={front:.0f}  left={left:.0f}  right={right:.0f}")
 
     # TODO: decide how the robot should move.
     # Right now it drives forward and simply stops in front of a wall.
-    if front > 150:
-        left_speed, right_speed = 0.0, 0.0
+    directions= ["forward", "left", "right"]
+    move = {directions[0]:(3.0,3.0),directions[1]:(-3.14,3.14),directions[2]:(3.14,0.0)}
+    wall_front = front>140
+    wall_front_right = front_right>130
+    wall_right = right>140
+
+    if wall_right and  wall_front_right or wall_front and wall_front_right:
+        current_move = "left"
+    elif wall_right or wall_front_right:
+        current_move = "forward"
     else:
-        left_speed, right_speed = 3.0, 3.0
+        current_move = "right"
+
+
+    # print(f"front={front:.0f}, front-right={front_right:.0f}, right={right:.0f}, front-left={front_left:.0f}, left={left:.0f}")
+    (left_speed, right_speed) = move[current_move]
+
 
     left_motor.setVelocity(clamp(left_speed))
     right_motor.setVelocity(clamp(right_speed))

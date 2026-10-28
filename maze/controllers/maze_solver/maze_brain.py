@@ -1,4 +1,5 @@
 import math
+from json.encoder import INFINITY
 
 
 class Tile:
@@ -12,7 +13,7 @@ class Tile:
 
     def set_path(self, side,target_tile:"Tile"):
         if side in self.paths.keys():
-                self.paths[side] = target_tile
+            self.paths[side] = target_tile
         else:
             raise ValueError("Invalid side")
 
@@ -32,8 +33,14 @@ class Tile:
 
 
 class Maze:
+
     def __init__(self,size):
+
         self.board =  [[Tile(value=size-1-y+x) for y in range(size)] for x in range(size)]
+        self.current_tile = self.board[size-1][0]
+        self.previous_tile = None
+        self.solved = False
+
 
         for x in range(size):
             for y in range(size):
@@ -55,3 +62,40 @@ class Maze:
             other_tile.set_path(side=opposites[side],target_tile=None)
         else:
             raise ValueError("no path found")
+
+    # TODO:is stuck
+    def is_stuck(self):
+        pass
+
+
+
+    #TODO:choose next tile
+    def choose_tile(self):
+        chosen = ("", self.current_tile.value)
+        directions=self.current_tile.paths.keys()
+
+        for direction in directions:
+            if self.current_tile.paths[direction] is not None:
+                if self.current_tile.paths[direction].value<chosen[1]:
+                    chosen = (direction,self.current_tile.paths[direction].value)
+
+
+        if chosen ==("",self.current_tile.value):
+            self.is_stuck()
+
+        print(chosen)
+        return chosen[0]
+
+
+    def go_to_next_tile(self,direction):
+        self.previous_tile,self.current_tile = self.current_tile,self.current_tile.paths[direction]
+        if self.current_tile.value==0:
+            self.solved = True
+            print(self.current_tile)
+
+
+if __name__ == "__main__":
+    maze = Maze(size=5)
+    while not maze.solved:
+        maze.go_to_next_tile(direction=maze.choose_tile())
+

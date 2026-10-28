@@ -1,14 +1,29 @@
 import math
-from json.encoder import INFINITY
+from dataclasses import dataclass, field
+from enum import Enum
 
 
+class Direction(Enum):
+    TOP = (-1, 0)
+    RIGHT = (0, 1)
+    BOTTOM = (1, 0)
+    LEFT = (0, -1)
+
+    @property
+    def opposite(self) -> "Direction":
+        opposites = {
+            Direction.TOP: Direction.BOTTOM,
+            Direction.BOTTOM: Direction.TOP,
+            Direction.RIGHT: Direction.LEFT,
+            Direction.LEFT: Direction.RIGHT,
+        }
+        return opposites[self]
+
+@dataclass
 class Tile:
 
-
-
-    def __init__(self,value:int = 0 ):
-        self.paths = {"top": None,"right": None, "bottom": None, "left": None }
-        self.value = value
+    value: int = 0
+    paths: dict[Direction, "Tile | None"] = field(default_factory=dict,repr=False)
 
 
     def set_path(self, side,target_tile:"Tile"):
@@ -35,7 +50,7 @@ class Tile:
 class Maze:
 
     def __init__(self,size):
-
+        self.size = size
         self.board =  [[Tile(value=size-1-y+x) for y in range(size)] for x in range(size)]
         self.current_tile = self.board[size-1][0]
         self.previous_tile = None
@@ -52,7 +67,7 @@ class Maze:
                 ]
                 self.board[x][y].set_all_paths(paths)
 
-
+    # creates wall (deletes paths from and to a tile)
     @staticmethod
     def remove_path(side, tile:Tile):
         opposites = {"top": "bottom", "bottom": "top", "right": "left", "left": "right"}
@@ -63,13 +78,15 @@ class Maze:
         else:
             raise ValueError("no path found")
 
-    # TODO:is stuck
-    def is_stuck(self):
-        pass
+    def stuck(self,chosen):
+        if chosen ==("",self.current_tile.value):
+            self.current_tile.value +=2
+            self.previous_tile +=3
+            return True
+        else:
+            return False
 
-
-
-    #TODO:choose next tile
+    # chooses witch direction to go next
     def choose_tile(self):
         chosen = ("", self.current_tile.value)
         directions=self.current_tile.paths.keys()
@@ -80,13 +97,11 @@ class Maze:
                     chosen = (direction,self.current_tile.paths[direction].value)
 
 
-        if chosen ==("",self.current_tile.value):
-            self.is_stuck()
-
+        self.stuck(chosen)
         print(chosen)
         return chosen[0]
 
-
+    # goes to the next tile and saves prevous tile as current
     def go_to_next_tile(self,direction):
         self.previous_tile,self.current_tile = self.current_tile,self.current_tile.paths[direction]
         if self.current_tile.value==0:
@@ -97,5 +112,6 @@ class Maze:
 if __name__ == "__main__":
     maze = Maze(size=5)
     while not maze.solved:
-        maze.go_to_next_tile(direction=maze.choose_tile())
+        direction = maze.choose_tile()
+        maze.go_to_next_tile(direction= direction)
 

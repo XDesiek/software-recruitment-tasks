@@ -18,10 +18,13 @@ Wheel radius: 2.05 cm, distance between the wheels: 5.2 cm.
 Fill in the parts marked TODO.
 """
 from controller import Robot
-
+from maze_brain import Maze
+from robot_brain import RobotBrain
 MAX_SPEED = 6.28
 
 robot = Robot()
+robot_brain = RobotBrain()
+maze = Maze(size=5)
 timestep = int(robot.getBasicTimeStep())
 
 # --- Motors ------------------------------------------------------------------
@@ -31,13 +34,15 @@ left_motor.setPosition(float("inf"))   # velocity control mode
 right_motor.setPosition(float("inf"))
 left_motor.setVelocity(0.0)
 right_motor.setVelocity(0.0)
+motors = (left_motor, right_motor)
 
 # --- Wheel encoders ----------------------------------------------------------
 left_encoder = robot.getDevice("left wheel sensor")
 right_encoder = robot.getDevice("right wheel sensor")
 left_encoder.enable(timestep)
 right_encoder.enable(timestep)
-
+encoders =(left_encoder, right_encoder)
+print(dir(left_encoder))
 # --- Distance sensors --------------------------------------------------------
 distance_sensors = []
 for i in range(8):
@@ -51,11 +56,10 @@ for name in ["gs0", "gs1", "gs2"]:
     sensor = robot.getDevice(name)
     sensor.enable(timestep)
     ground_sensors.append(sensor)
-
+parts = {"motors": motors, "encoders": encoders, "distance_sensors": distance_sensors, "ground_sensors": ground_sensors}
 
 def clamp(value, low=-MAX_SPEED, high=MAX_SPEED):
     return max(low, min(high, value))
-
 
 # --- Main loop ---------------------------------------------------------------
 while robot.step(timestep) != -1:
@@ -64,15 +68,17 @@ while robot.step(timestep) != -1:
     left = ps[5]
     right = ps[2]
 
-    # Uncomment to see the sensor values in the console:
-    # print(f"front={front:.0f}  left={left:.0f}  right={right:.0f}")
+    print(robot_brain.driving,maze.solved)
+    if robot_brain.driving:
+        (left_speed,right_speed)=robot_brain.travel(encoders=encoders)
+        left_motor.setVelocity(clamp(left_speed))
+        right_motor.setVelocity(clamp(right_speed))
+    elif not maze.solved:
+        # TODO:scan and update to maze brain
+        robot_brain.scan()
+        direction = maze.choose_tile()
+        print("direction: ", direction)
+        robot_brain.set_travel(direction)
+        maze.go_to_next_tile(direction= direction)
 
-    # TODO: decide how the robot should move.
-    # Right now it drives forward and simply stops in front of a wall.
-    if front > 150:
-        left_speed, right_speed = 0.0, 0.0
-    else:
-        left_speed, right_speed = 3.0, 3.0
 
-    left_motor.setVelocity(clamp(left_speed))
-    right_motor.setVelocity(clamp(right_speed))

@@ -26,22 +26,22 @@ class Tile:
     paths: dict[Direction, "Tile | None"] = field(default_factory=dict,repr=False)
 
 
-    def set_path(self, side,target_tile:"Tile"):
-        if side in self.paths.keys():
-            self.paths[side] = target_tile
+    def set_path(self, direction,target_tile:"Tile"):
+        if direction in self.paths.keys():
+            self.paths[direction] = target_tile
         else:
-            raise ValueError("Invalid side")
+            raise ValueError("Invalid direction")
 
 
-    def get_path(self, side):
-        if side in self.paths:
-            return self.paths[side]
+    def get_path(self, direction):
+        if direction in self.paths:
+            return self.paths[direction]
         else:
-            raise ValueError("Invalid side")
+            raise ValueError("Invalid direction")
 
     def set_all_paths(self, paths: list[Tile]):
         if len(paths) == 4:
-            keys = ("top", "right", "bottom", "left")
+            keys = (Direction.TOP, Direction.RIGHT, Direction.BOTTOM, Direction.LEFT)
             self.paths.update(zip(keys, paths))
         else:
             raise ValueError("Invalid number of paths")
@@ -69,12 +69,11 @@ class Maze:
 
     # creates wall (deletes paths from and to a tile)
     @staticmethod
-    def remove_path(side, tile:Tile):
-        opposites = {"top": "bottom", "bottom": "top", "right": "left", "left": "right"}
-        other_tile = tile.get_path(side=side)
+    def remove_path(direction, tile:Tile):
+        other_tile = tile.get_path(direction=direction)
         if other_tile:
-            tile.set_path(side=side,target_tile=None)
-            other_tile.set_path(side=opposites[side],target_tile=None)
+            tile.set_path(direction=direction,target_tile=None)
+            other_tile.set_path(direction=direction.opposite,target_tile=None)
         else:
             raise ValueError("no path found")
 
@@ -89,16 +88,18 @@ class Maze:
     # chooses witch direction to go next
     def choose_tile(self):
         chosen = ("", self.current_tile.value)
-        directions=self.current_tile.paths.keys()
+        directions=[
+            direction
+            for direction, tile in self.current_tile.paths.items()
+            if tile is not None]
 
         for direction in directions:
-            if self.current_tile.paths[direction] is not None:
-                if self.current_tile.paths[direction].value<chosen[1]:
-                    chosen = (direction,self.current_tile.paths[direction].value)
+            if self.current_tile.paths[direction].value<chosen[1]:
+                chosen = (direction,self.current_tile.paths[direction].value)
 
 
-        self.stuck(chosen)
-        print(chosen)
+        # self.stuck(chosen)
+        print(chosen[0])
         return chosen[0]
 
     # goes to the next tile and saves prevous tile as current
@@ -109,9 +110,5 @@ class Maze:
             print(self.current_tile)
 
 
-if __name__ == "__main__":
-    maze = Maze(size=5)
-    while not maze.solved:
-        direction = maze.choose_tile()
-        maze.go_to_next_tile(direction= direction)
+
 

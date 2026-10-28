@@ -24,8 +24,9 @@ MAX_SPEED = 6.28
 
 robot = Robot()
 robot_brain = RobotBrain()
-maze = Maze(size=5)
+maze = Maze(size=8)
 timestep = int(robot.getBasicTimeStep())
+
 
 # --- Motors ------------------------------------------------------------------
 left_motor = robot.getDevice("left wheel motor")
@@ -42,7 +43,7 @@ right_encoder = robot.getDevice("right wheel sensor")
 left_encoder.enable(timestep)
 right_encoder.enable(timestep)
 encoders =(left_encoder, right_encoder)
-print(dir(left_encoder))
+
 # --- Distance sensors --------------------------------------------------------
 distance_sensors = []
 for i in range(8):
@@ -64,21 +65,24 @@ def clamp(value, low=-MAX_SPEED, high=MAX_SPEED):
 # --- Main loop ---------------------------------------------------------------
 while robot.step(timestep) != -1:
     ps = [s.getValue() for s in distance_sensors]
-    front = max(ps[0], ps[7])
-    left = ps[5]
-    right = ps[2]
+    importatnt_sensors = (max(ps[0], ps[7]),ps[2],max(ps[3], ps[4]),ps[5    ])
 
-    print(robot_brain.driving,maze.solved)
+    # print ("importatnt_sensors: ", importatnt_sensors)
     if robot_brain.driving:
         (left_speed,right_speed)=robot_brain.travel(encoders=encoders)
         left_motor.setVelocity(clamp(left_speed))
         right_motor.setVelocity(clamp(right_speed))
     elif not maze.solved:
         # TODO:scan and update to maze brain
-        robot_brain.scan()
+
+        walls = robot_brain.scan(importatnt_sensors)
+        # print(importatnt_sensors)
+        maze.set_walls(walls)
         direction = maze.choose_tile()
-        print("direction: ", direction)
+        print(direction)
         robot_brain.set_travel(direction)
+        # print("current: ",maze.current_tile.paths)
         maze.go_to_next_tile(direction= direction)
+        # print("next:    ",maze.current_tile.paths)
 
 

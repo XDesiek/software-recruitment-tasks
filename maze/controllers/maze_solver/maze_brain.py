@@ -8,7 +8,8 @@ class Direction(Enum):
     RIGHT = (0, 1)
     BOTTOM = (1, 0)
     LEFT = (0, -1)
-
+    def __repr__(self) -> str:
+        return self.name
     @property
     def opposite(self) -> "Direction":
         opposites = {
@@ -68,38 +69,43 @@ class Maze:
                 self.board[x][y].set_all_paths(paths)
 
     # creates wall (deletes paths from and to a tile)
-    @staticmethod
-    def remove_path(direction, tile:Tile):
-        other_tile = tile.get_path(direction=direction)
+    def remove_path(self,direction):
+        other_tile = self.current_tile.get_path(direction=direction)
         if other_tile:
-            tile.set_path(direction=direction,target_tile=None)
+            self.current_tile.set_path(direction=direction,target_tile=None)
             other_tile.set_path(direction=direction.opposite,target_tile=None)
-        else:
+        elif other_tile is not None:
             raise ValueError("no path found")
 
+    def set_walls(self,walls):
+        for wall in walls:
+            self.remove_path(direction=wall)
+
+
     def stuck(self,chosen):
-        if chosen ==("",self.current_tile.value):
+        if chosen ==(None,self.current_tile.value):
             self.current_tile.value +=2
-            self.previous_tile +=3
+            self.previous_tile.value +=3
             return True
         else:
             return False
 
     # chooses witch direction to go next
     def choose_tile(self):
-        chosen = ("", self.current_tile.value)
-        directions=[
-            direction
-            for direction, tile in self.current_tile.paths.items()
-            if tile is not None]
+        while True:
+            chosen = (None, self.current_tile.value)
+            directions=[
+                direction
+                for direction, tile in self.current_tile.paths.items()
+                if tile is not None]
 
-        for direction in directions:
-            if self.current_tile.paths[direction].value<chosen[1]:
-                chosen = (direction,self.current_tile.paths[direction].value)
+            for direction in directions:
+                if self.current_tile.paths[direction].value<chosen[1]:
+                    chosen = (direction,self.current_tile.paths[direction].value)
+            # TODO:
+            if not self.stuck(chosen):
+                break
 
-
-        # self.stuck(chosen)
-        print(chosen[0])
         return chosen[0]
 
     # goes to the next tile and saves prevous tile as current
@@ -107,7 +113,7 @@ class Maze:
         self.previous_tile,self.current_tile = self.current_tile,self.current_tile.paths[direction]
         if self.current_tile.value==0:
             self.solved = True
-            print(self.current_tile)
+
 
 
 

@@ -24,7 +24,7 @@ MAX_SPEED = 6.28
 
 robot = Robot()
 robot_brain = RobotBrain()
-maze = Maze(size=8)
+maze = Maze(size=5)
 timestep = int(robot.getBasicTimeStep())
 
 
@@ -78,15 +78,13 @@ while robot.step(timestep) != -1:
     elif not maze.solved:
         # TODO:calibrate after each tile driven or after x tiles and when around 2 walls (or if a wall was calibrated later than 3 tiles
 
-        print(importatnt_sensors)
+        # print(importatnt_sensors)
         # Creates walls so it chooses only a path without one
         walls = robot_brain.scan(importatnt_sensors)
         maze.set_walls(walls)
         #
         direction = maze.choose_tile()
         # Creates a list of moves to get to the destination
-
-        # TODO:change set travel to move dependantly of its previous rotation
         robot_brain.set_travel(direction=direction)
         # goes to the next tile in brain
         maze.go_to_next_tile(direction= direction)

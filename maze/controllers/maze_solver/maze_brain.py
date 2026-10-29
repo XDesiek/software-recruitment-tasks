@@ -10,15 +10,32 @@ class Direction(Enum):
     LEFT = (0, -1)
     def __repr__(self) -> str:
         return self.name
+
+    @property
+    def clockwise(self) -> "Direction":
+        members = list(Direction)
+        return members[(members.index(self) + 1) % len(members)]
+
+    @property
+    def counter_clockwise(self) -> "Direction":
+        members = list(Direction)
+        return members[(members.index(self) - 1) % len(members)]
+
     @property
     def opposite(self) -> "Direction":
-        opposites = {
-            Direction.TOP: Direction.BOTTOM,
-            Direction.BOTTOM: Direction.TOP,
-            Direction.RIGHT: Direction.LEFT,
-            Direction.LEFT: Direction.RIGHT,
-        }
-        return opposites[self]
+        members = list(Direction)
+        return members[(members.index(self) + 2) % len(members)]
+
+    def rotate(self,current_rotation):
+        match current_rotation:
+            case Direction.TOP:
+                return  self
+            case Direction.RIGHT:
+                return self.clockwise
+            case Direction.BOTTOM:
+                return self.opposite
+            case Direction.LEFT:
+                return self.counter_clockwise
 
 
 # ----------------------------------------------------------------------------------------------------------
@@ -62,8 +79,12 @@ class Maze:
     # creates wall (deletes paths from and to a tile)
     def set_wall(self,direction):
         other_tile = self.current_tile.paths[direction]
-        self.current_tile.paths[direction]=None
-        other_tile.paths[direction.opposite]=None
+        if other_tile:
+            self.current_tile.paths[direction]=None
+            other_tile.paths[direction.opposite]=None
+        elif other_tile is not None:
+            raise ValueError("Invalid direction")
+
 
     def set_walls(self,walls):
         for wall in walls:
@@ -87,9 +108,9 @@ class Maze:
 
             chosen = min(
                 valid_options,
-                key=lambda option: option[1],
-                default=(None, self.current_tile.value)
+                key=lambda option: option[1]
             )
+            if chosen[1] >self.current_tile.value: chosen = (None, self.current_tile.value)
             if not self.stuck(chosen):
                 break
 

@@ -57,7 +57,6 @@ for name in ["gs0", "gs1", "gs2"]:
     sensor = robot.getDevice(name)
     sensor.enable(timestep)
     ground_sensors.append(sensor)
-parts = {"motors": motors, "encoders": encoders, "distance_sensors": distance_sensors, "ground_sensors": ground_sensors}
 
 def clamp(value, low=-MAX_SPEED, high=MAX_SPEED):
     return max(low, min(high, value))
@@ -65,24 +64,31 @@ def clamp(value, low=-MAX_SPEED, high=MAX_SPEED):
 # --- Main loop ---------------------------------------------------------------
 while robot.step(timestep) != -1:
     ps = [s.getValue() for s in distance_sensors]
-    importatnt_sensors = (max(ps[0], ps[7]),ps[2],max(ps[3], ps[4]),ps[5    ])
+    importatnt_sensors = (max(ps[0], ps[7]),ps[2],max(ps[3], ps[4]),ps[5])
 
-    # print ("importatnt_sensors: ", importatnt_sensors)
+
+# --- driving logic ------------------------------------------------------------
     if robot_brain.driving:
         (left_speed,right_speed)=robot_brain.travel(encoders=encoders)
         left_motor.setVelocity(clamp(left_speed))
         right_motor.setVelocity(clamp(right_speed))
-    elif not maze.solved:
-        # TODO:scan and update to maze brain
 
+
+# --- pathing logic ------------------------------------------------------------
+    elif not maze.solved:
+        # TODO:calibrate after each tile driven or after x tiles and when around 2 walls (or if a wall was calibrated later than 3 tiles
+
+        print(importatnt_sensors)
+        # Creates walls so it chooses only a path without one
         walls = robot_brain.scan(importatnt_sensors)
-        # print(importatnt_sensors)
         maze.set_walls(walls)
+        #
         direction = maze.choose_tile()
-        print(direction)
-        robot_brain.set_travel(direction)
-        # print("current: ",maze.current_tile.paths)
+        # Creates a list of moves to get to the destination
+
+        # TODO:change set travel to move dependantly of its previous rotation
+        robot_brain.set_travel(direction=direction)
+        # goes to the next tile in brain
         maze.go_to_next_tile(direction= direction)
-        # print("next:    ",maze.current_tile.paths)
 
 

@@ -20,25 +20,14 @@ class Direction(Enum):
         }
         return opposites[self]
 
+
+# ----------------------------------------------------------------------------------------------------------
 @dataclass
 class Tile:
 
     value: int = 0
     paths: dict[Direction, "Tile | None"] = field(default_factory=dict,repr=False)
 
-
-    def set_path(self, direction,target_tile:"Tile"):
-        if direction in self.paths.keys():
-            self.paths[direction] = target_tile
-        else:
-            raise ValueError("Invalid direction")
-
-
-    def get_path(self, direction):
-        if direction in self.paths:
-            return self.paths[direction]
-        else:
-            raise ValueError("Invalid direction")
 
     def set_all_paths(self, paths: list[Tile]):
         if len(paths) == 4:
@@ -47,7 +36,7 @@ class Tile:
         else:
             raise ValueError("Invalid number of paths")
 
-
+# -------------------------------------------------------------------------------------------------------
 class Maze:
 
     def __init__(self,size):
@@ -68,41 +57,39 @@ class Maze:
                 ]
                 self.board[x][y].set_all_paths(paths)
 
+
+
     # creates wall (deletes paths from and to a tile)
-    def remove_path(self,direction):
-        other_tile = self.current_tile.get_path(direction=direction)
-        if other_tile:
-            self.current_tile.set_path(direction=direction,target_tile=None)
-            other_tile.set_path(direction=direction.opposite,target_tile=None)
-        elif other_tile is not None:
-            raise ValueError("no path found")
+    def set_wall(self,direction):
+        other_tile = self.current_tile.paths[direction]
+        self.current_tile.paths[direction]=None
+        other_tile.paths[direction.opposite]=None
 
     def set_walls(self,walls):
         for wall in walls:
-            self.remove_path(direction=wall)
+            self.set_wall(wall)
 
-
+    # adds to the current path so its less likely to go there again
     def stuck(self,chosen):
-        if chosen ==(None,self.current_tile.value):
+        if chosen[0] is None:
             self.current_tile.value +=2
             self.previous_tile.value +=3
             return True
-        else:
-            return False
+        else:return False
 
     # chooses witch direction to go next
     def choose_tile(self):
         while True:
-            chosen = (None, self.current_tile.value)
-            directions=[
-                direction
+            valid_options=(
+                (direction,tile.value)
                 for direction, tile in self.current_tile.paths.items()
-                if tile is not None]
+                if tile is not None)
 
-            for direction in directions:
-                if self.current_tile.paths[direction].value<chosen[1]:
-                    chosen = (direction,self.current_tile.paths[direction].value)
-            # TODO:
+            chosen = min(
+                valid_options,
+                key=lambda option: option[1],
+                default=(None, self.current_tile.value)
+            )
             if not self.stuck(chosen):
                 break
 

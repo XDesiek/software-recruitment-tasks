@@ -1,5 +1,3 @@
-from unittest import case
-
 from maze_brain import Direction
 
 
@@ -14,36 +12,40 @@ class RobotBrain:
     def calibrate(self,walls):
             # wall[0] -> kierunek sciany
             # wall[0] -> "dystans" do sciany
-            w= [wall[0] for wall in walls if wall[1]]
-            return w
+            return [wall[0].opposite for wall in walls if wall[1]]
 
-    def travel(self,encoders,front_sensor):
+
+    def travel(self,encoders,back_sensor):
         enc_val= ((self.previous_encoder_values[0],encoders[0].getValue()),
                          (self.previous_encoder_values[1],encoders[1].getValue()))
 
 
         DRIVEVALUE=5.85#d/r=alpha(5.85)
         TURNVALUE=2.22# pi*R/2r = alpha(1.99) ??not working
+        DRIVESPEED = 5.0
+        TURNSPEED = 1.7#has to be exactly 1.7 if more or less it works has to calibrate more often
+        CALIBRATIONSPEED=0.8
+        # DONT CHANGE THE PARAMETERS ON THEIR OWN
         match self.moves[0]:
             # calibrate forward
             case (Direction.TOP,"calibrate"):
-                if front_sensor<100:
-                    return(0.5,0.5)
+                if back_sensor>150:
+                    return(CALIBRATIONSPEED,CALIBRATIONSPEED)
             # drive FORWARD
             case (Direction.TOP,"drive"):
                 if  abs(enc_val[0][1]-enc_val[0][0]) < DRIVEVALUE and \
                     abs(enc_val[1][1]-enc_val[1][0]) < DRIVEVALUE:
-                    return (3.0,3.0)
+                    return (DRIVESPEED,DRIVESPEED)
             # turn RIGHT
             case (Direction.RIGHT,_):
                 if  abs(enc_val[0][1]-enc_val[0][0]) < TURNVALUE  and \
                     abs(enc_val[1][1]-enc_val[1][0]) < TURNVALUE:
-                    return (1.5, -1.5)
+                    return (TURNSPEED, -TURNSPEED)
             # turn LEFT
             case (Direction.LEFT,_):
                 if  abs(enc_val[0][1]-enc_val[0][0]) < TURNVALUE and \
                     abs(enc_val[1][1]-enc_val[1][0]) < TURNVALUE:
-                    return (-1.5, 1.5)
+                    return (-TURNSPEED, TURNSPEED)
 
 
         self.current_rotation=self.current_rotation.rotate(self.moves[0][0])
@@ -81,11 +83,14 @@ class RobotBrain:
                                    Direction.TOP
                                    ])
         self.moves = list(zip(new_moves,[move_type]*len(new_moves)))
+
+
+
     def scan(self,sensors):
         walls = []
 
         for direction,sensor in zip(Direction,sensors):
             if sensor>85:
-                walls.append((direction.rotate(self.current_rotation),sensor if sensor<100 else 0 ))
+                walls.append((direction.rotate(self.current_rotation),sensor if sensor>200 else 0 ))
         # returns where the walls are and their "distance" to the wall
         return walls

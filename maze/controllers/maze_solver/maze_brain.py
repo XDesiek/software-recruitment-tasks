@@ -11,7 +11,8 @@ class Direction(Enum):
     LEFT = (0, -1)
     def __repr__(self) -> str:
         return self.name
-
+    def __str__(self) -> str:
+        return self.name
     @property
     def clockwise(self) -> "Direction":
         members = list(Direction)

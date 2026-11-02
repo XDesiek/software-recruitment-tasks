@@ -69,15 +69,13 @@ while robot.step(timestep) != -1:
 
 # --- driving logic ------------------------------------------------------------
     if robot_brain.driving:
-        (left_speed,right_speed)=robot_brain.travel(encoders=encoders,front_sensor=importatnt_sensors[0])
+        (left_speed,right_speed)=robot_brain.travel(encoders=encoders,back_sensor=importatnt_sensors[2])
         left_motor.setVelocity(clamp(left_speed))
         right_motor.setVelocity(clamp(right_speed))
 
 
 # --- pathing logic ------------------------------------------------------------
     elif not maze.solved:
-        # TODO:change calibration aby sie oddalal od sciany a nie przyblizal
-        print(importatnt_sensors)
         # Creates walls so it chooses only a path without one
         walls = robot_brain.scan(importatnt_sensors)
         maze.set_walls(wall[0] for wall in walls)
@@ -85,6 +83,7 @@ while robot.step(timestep) != -1:
         directions_to_calibrate = robot_brain.calibrate(walls)
         if directions_to_calibrate:
             robot_brain.set_travel(direction=directions_to_calibrate[0],move_type="calibrate")
+            print("moving away from {} wall...".format(directions_to_calibrate[0].opposite))
         # jak nie ma niczego do kalibracji
         else:
             direction = maze.choose_tile()

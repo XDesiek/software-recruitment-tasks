@@ -64,6 +64,7 @@ def clamp(value, low=-MAX_SPEED, high=MAX_SPEED):
 # --- Main loop ---------------------------------------------------------------
 while robot.step(timestep) != -1:
     ps = [s.getValue() for s in distance_sensors]
+
     importatnt_sensors = (max(ps[0], ps[7]),ps[2],max(ps[3], ps[4]),ps[5])
 
 
@@ -73,9 +74,14 @@ while robot.step(timestep) != -1:
         left_motor.setVelocity(clamp(left_speed))
         right_motor.setVelocity(clamp(right_speed))
 
-
 # --- pathing logic ------------------------------------------------------------
     elif not maze.solved:
+
+        if 700>min([s.getValue() for s in ground_sensors]):  # na zielonym polu
+            maze.solved = True
+            print("Solved!")
+            break
+
         # Creates walls so it chooses only a path without one
         walls = robot_brain.scan(importatnt_sensors)
         maze.set_walls(wall[0] for wall in walls)

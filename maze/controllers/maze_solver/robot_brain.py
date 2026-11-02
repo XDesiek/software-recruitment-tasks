@@ -16,16 +16,18 @@ class RobotBrain:
 
 
     def travel(self,encoders,back_sensor):
-        enc_val= ((self.previous_encoder_values[0],encoders[0].getValue()),
-                         (self.previous_encoder_values[1],encoders[1].getValue()))
-
-
+        # DONT CHANGE THE PARAMETERS ON THEIR OWN
         DRIVEVALUE=5.85#d/r=alpha(5.85)
         TURNVALUE=2.22# pi*R/2r = alpha(1.99) ??not working
         DRIVESPEED = 5.0
         TURNSPEED = 1.7#has to be exactly 1.7 if more or less it works has to calibrate more often
         CALIBRATIONSPEED=0.8
-        # DONT CHANGE THE PARAMETERS ON THEIR OWN
+
+        # encoder values
+        enc_val= ((self.previous_encoder_values[0],encoders[0].getValue()),
+                         (self.previous_encoder_values[1],encoders[1].getValue()))
+
+
         match self.moves[0]:
             # calibrate forward
             case (Direction.TOP,"calibrate"):
@@ -49,39 +51,34 @@ class RobotBrain:
 
 
         self.current_rotation=self.current_rotation.rotate(self.moves[0][0])
-        del self.moves[0]
         self.previous_encoder_values=(enc_val[0][1],enc_val[1][1])
-        if not self.moves:
-            self.driving = False
+        del self.moves[0]
+        if not self.moves:self.driving = False
         return(0.0,0.0)
 
-    def set_travel(self,direction,move_type):
-        self.driving = True
+
+    def generate_steps(self,direction):
         new_moves =[]
 
         match direction.anty_rotate(self.current_rotation):
             # drive FORWARD
             case Direction.TOP:
                 new_moves.append(Direction.TOP)
-
-            # drive BACKWARD
-            case Direction.BOTTOM:
-                new_moves.extend([Direction.RIGHT,
-                                   Direction.RIGHT,
-                                   Direction.TOP
-                                   ])
-
-            # drive LEFTWARD
-            case Direction.LEFT:
-                new_moves.extend([Direction.LEFT,
-                                   Direction.TOP
-                                   ])
-
             # drive RIGHTWARD
             case Direction.RIGHT:
-                new_moves.extend([Direction.RIGHT,
-                                   Direction.TOP
-                                   ])
+                new_moves.extend([Direction.RIGHT,Direction.TOP])
+            # drive BACKWARD
+            case Direction.BOTTOM:
+                new_moves.extend([Direction.RIGHT,Direction.RIGHT,Direction.TOP])
+            # drive LEFTWARD
+            case Direction.LEFT:
+                new_moves.extend([Direction.LEFT,Direction.TOP])
+        return new_moves
+
+
+    def set_travel(self,direction,move_type):
+        self.driving = True
+        new_moves = self.generate_steps(direction)
         self.moves = list(zip(new_moves,[move_type]*len(new_moves)))
 
 
@@ -91,6 +88,9 @@ class RobotBrain:
 
         for direction,sensor in zip(Direction,sensors):
             if sensor>85:
-                walls.append((direction.rotate(self.current_rotation),sensor if sensor>200 else 0 ))
+                walls.append((
+                    direction.rotate(self.current_rotation),sensor
+                    if sensor>200
+                    else 0 ))
         # returns where the walls are and their "distance" to the wall
         return walls

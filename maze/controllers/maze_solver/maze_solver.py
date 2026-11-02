@@ -64,7 +64,6 @@ def clamp(value, low=-MAX_SPEED, high=MAX_SPEED):
 # --- Main loop ---------------------------------------------------------------
 while robot.step(timestep) != -1:
     ps = [s.getValue() for s in distance_sensors]
-
     importatnt_sensors = (max(ps[0], ps[7]),ps[2],max(ps[3], ps[4]),ps[5])
 
 
@@ -74,28 +73,30 @@ while robot.step(timestep) != -1:
         left_motor.setVelocity(clamp(left_speed))
         right_motor.setVelocity(clamp(right_speed))
 
-# --- pathing logic ------------------------------------------------------------
     elif not maze.solved:
-
+# --- checking goal  -----------------------------------------------------------
         if 700>min([s.getValue() for s in ground_sensors]):  # na zielonym polu
             maze.solved = True
             print("Solved!")
             break
+# --- pathing logic ------------------------------------------------------------
 
         # Creates walls so it chooses only a path without one
         walls = robot_brain.scan(importatnt_sensors)
         maze.set_walls(wall[0] for wall in walls)
-        # calibration
+
+# --- calibration --------------------------------------------------------------
         directions_to_calibrate = robot_brain.calibrate(walls)
         if directions_to_calibrate:
             robot_brain.set_travel(direction=directions_to_calibrate[0],move_type="calibrate")
             print("moving away from {} wall...".format(directions_to_calibrate[0].opposite))
-        # jak nie ma niczego do kalibracji
+
         else:
+# --- choosing next move --------------------------------------------------------
             direction = maze.choose_tile()
             # Creates a list of moves to get to the destination
             robot_brain.set_travel(direction=direction,move_type="drive")
             # goes to the next tile in brain
-            maze.go_to_next_tile(direction= direction)
+            maze.go_to_next_tile(direction=direction)
 
 

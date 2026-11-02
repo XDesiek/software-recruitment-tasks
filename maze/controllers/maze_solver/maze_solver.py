@@ -24,7 +24,7 @@ MAX_SPEED = 6.28
 
 robot = Robot()
 robot_brain = RobotBrain()
-maze = Maze(size=5)
+maze = Maze(size=8)
 timestep = int(robot.getBasicTimeStep())
 
 
@@ -69,24 +69,28 @@ while robot.step(timestep) != -1:
 
 # --- driving logic ------------------------------------------------------------
     if robot_brain.driving:
-        (left_speed,right_speed)=robot_brain.travel(encoders=encoders)
+        (left_speed,right_speed)=robot_brain.travel(encoders=encoders,front_sensor=importatnt_sensors[0])
         left_motor.setVelocity(clamp(left_speed))
         right_motor.setVelocity(clamp(right_speed))
 
 
 # --- pathing logic ------------------------------------------------------------
     elif not maze.solved:
-        # TODO:calibrate after each tile driven or after x tiles and when around 2 walls (or if a wall was calibrated later than 3 tiles
-
-        # print(importatnt_sensors)
+        # TODO:change calibration aby sie oddalal od sciany a nie przyblizal
+        print(importatnt_sensors)
         # Creates walls so it chooses only a path without one
         walls = robot_brain.scan(importatnt_sensors)
-        maze.set_walls(walls)
-        #
-        direction = maze.choose_tile()
-        # Creates a list of moves to get to the destination
-        robot_brain.set_travel(direction=direction)
-        # goes to the next tile in brain
-        maze.go_to_next_tile(direction= direction)
+        maze.set_walls(wall[0] for wall in walls)
+        # calibration
+        directions_to_calibrate = robot_brain.calibrate(walls)
+        if directions_to_calibrate:
+            robot_brain.set_travel(direction=directions_to_calibrate[0],move_type="calibrate")
+        # jak nie ma niczego do kalibracji
+        else:
+            direction = maze.choose_tile()
+            # Creates a list of moves to get to the destination
+            robot_brain.set_travel(direction=direction,move_type="drive")
+            # goes to the next tile in brain
+            maze.go_to_next_tile(direction= direction)
 
 

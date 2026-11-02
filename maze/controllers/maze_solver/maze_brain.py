@@ -1,6 +1,7 @@
 import math
 from dataclasses import dataclass, field
 from enum import Enum
+from unittest import case
 
 
 class Direction(Enum):
@@ -26,6 +27,7 @@ class Direction(Enum):
         members = list(Direction)
         return members[(members.index(self) + 2) % len(members)]
 
+    # z mapy na robota
     def rotate(self,current_rotation):
         match current_rotation:
             case Direction.TOP:
@@ -36,7 +38,18 @@ class Direction(Enum):
                 return self.opposite
             case Direction.LEFT:
                 return self.counter_clockwise
-
+    # TODO: dalej zmienic to bo to strasznie wyglada
+    # z robota na mape
+    def anty_rotate(self,current_rotation):
+        match current_rotation:
+            case Direction.TOP:
+                return self
+            case Direction.RIGHT:
+                return self.counter_clockwise
+            case Direction.BOTTOM:
+                return self.opposite
+            case Direction.LEFT:
+                return self.clockwise
 
 # ----------------------------------------------------------------------------------------------------------
 @dataclass
